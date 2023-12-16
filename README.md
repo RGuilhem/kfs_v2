@@ -1,2 +1,6 @@
 # kfs_v2
-requires qemu-system-i386
+
+## Requirements
+qemu-system-x86_64
+nightly version of rustc
+cargo install bootimage
