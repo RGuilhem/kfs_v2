@@ -20,6 +20,8 @@ pub enum Color {
     White = 15,
 }
 
+use volatile::Volatile;
+
 const BUFFER_WIDTH: usize = 80;
 const BUFFER_HEIGHT: usize = 25;
 
@@ -42,7 +44,7 @@ struct VgaChar {
 
 #[repr(transparent)]
 struct VgaBuffer {
-    chars: [[VgaChar; BUFFER_WIDTH]; BUFFER_HEIGHT];
+    chars: [[Volatile<VgaChar>; BUFFER_WIDTH]; BUFFER_HEIGHT],
 }
 
 pub struct Writer {
@@ -56,19 +58,38 @@ impl Writer {
         match byte {
             b'\n' => self.new_line(),
             byte => {
-                if (self.col_pos >= BUFFER_WIDTH) {
+                if self.col_pos >= BUFFER_WIDTH {
                     self.new_line();
                 }
-                self.buff[BUFFER_HEIGHT - 1][self.col_pos] = VgaChar {
+                self.buff.chars[BUFFER_HEIGHT - 1][self.col_pos].write( VgaChar {
                     ascii_char: byte,
                     color_code: self.color_code,
-                }
+                });
                 self.col_pos += 1;
             }
         }
     }
 
-    pub fn new_line(&mut self) {}
+    pub fn new_line(&mut self) {
+        for row in 1..BUFFER_HEIGHT {
+            for col in 0..BUFFER_WIDTH {
+                let character = self.buff.chars[row][col].read();
+                self.buff.chars[row - 1][col].write(character);
+            }
+        }
+        self.clear_row(BUFFER_HEIGHT - 1);
+        self.col_pos = 0;
+    }
+
+    pub fn clear_row(&mut self, row: usize) {
+        let blank = VgaChar {
+            ascii_char: b' ',
+            color_code: self.color_code,
+        };
+        for col in 0..BUFFER_WIDTH {
+            self.buff.chars[row][col].write(blank);
+        }
+    }
 
     pub fn write_string(&mut self, string: &str) {
         for byte in string.bytes() {
@@ -77,5 +98,14 @@ impl Writer {
                 _ => self.write_byte(0xfe),
             }
         }
+    }
+}
+
+use core::fmt;
+
+impl fmt::Write for Writer {
+    fn write_str(&mut self, string: &str) -> fmt::Result {
+        self.write_string(string);
+        Ok(())
     }
 }
