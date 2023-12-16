@@ -7,6 +7,7 @@ fn panic(_info: &PanicInfo) -> ! {
     loop {}
 }
 
+mod vga_buffer;
 static HELLO: &[u8] = b"Hello there!";
 
 #[no_mangle]
