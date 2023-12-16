@@ -13,4 +13,11 @@ name = "kfs_v2"
 version = "0.1.0"
 dependencies = [
  "bootloader",
+ "volatile",
 ]
+
+[[package]]
+name = "volatile"
+version = "0.5.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "9eaac9f9d9b7ae00cdd43e21b15e58ccacd903e6d29131d7536765a61969d25e"
