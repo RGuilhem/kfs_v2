@@ -1,17 +1,18 @@
 #![no_std]
 #![no_main]
 
+mod vga_buffer;
 use core::panic::PanicInfo;
 #[panic_handler]
 fn panic(_info: &PanicInfo) -> ! {
+    println!("{}", _info);
     loop {}
 }
 
-mod vga_buffer;
 
 #[no_mangle]
 pub extern "C" fn _start() -> ! {
-    println!("Hello World {}{}", "!", "\n");
-
+    println!("Hello World {}", "!");
+    panic!("error in _start");
     loop {}
 }
