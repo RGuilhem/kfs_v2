@@ -109,3 +109,14 @@ impl fmt::Write for Writer {
         Ok(())
     }
 }
+
+use lazy_static::lazy_static;
+use spin::Mutex;
+
+lazy_static! {
+    pub static ref WRITER: Mutex<Writer> = Mutex::new(Writer {
+        col_pos: 0,
+        color_code: ColorCode::new(Color::Green, Color::Black),
+        buff: unsafe {&mut *(0xb8000 as *mut VgaBuffer)},
+    });
+}
