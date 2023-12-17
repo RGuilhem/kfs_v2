@@ -6,6 +6,9 @@
 
 use core::panic::PanicInfo;
 
+pub mod serial;
+pub mod vga_buffer;
+
 pub trait Testable {
     fn run(&self) -> ();
 }
@@ -65,6 +68,3 @@ pub fn exit_qemu(exit_code: QemuExitCode) {
         port.write(exit_code as u32);
     }
 }
-
-pub mod serial;
-pub mod vga_buffer;
