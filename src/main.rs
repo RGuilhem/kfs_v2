@@ -9,7 +9,12 @@ use kfs_v2::println;
 
 #[no_mangle]
 pub extern "C" fn _start() -> ! {
+    kfs_v2::init();
     println!("Hello World{}", "!");
+
+    x86_64::instructions::interrupts::int3();
+
+    println!("Message after breakpoint interrupt");
 
     #[cfg(test)]
     test_main();
