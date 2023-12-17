@@ -19,3 +19,8 @@ pub fn init_idt() {
 extern "x86-interrupt" fn breakpoint_handler(stack_frame: InterruptStackFrame) {
     println!("Exception: BREAKPOINT\n{:#?}", stack_frame);
 }
+
+#[test_case]
+fn test_breakpoint_handler() {
+    x86_64::instructions::interrupts::int3();
+}
