@@ -4,8 +4,8 @@
 #![test_runner(kfs_v2::test_runner)]
 #![reexport_test_harness_main = "test_main"]
 
-use kfs_v2::println;
 use core::panic::PanicInfo;
+use kfs_v2::println;
 
 #[no_mangle]
 pub extern "C" fn _start() -> ! {

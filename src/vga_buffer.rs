@@ -62,7 +62,7 @@ impl Writer {
                 if self.col_pos >= BUFFER_WIDTH {
                     self.new_line();
                 }
-                self.buff.chars[BUFFER_HEIGHT - 1][self.col_pos].write( VgaChar {
+                self.buff.chars[BUFFER_HEIGHT - 1][self.col_pos].write(VgaChar {
                     ascii_char: byte,
                     color_code: self.color_code,
                 });
@@ -118,7 +118,7 @@ lazy_static! {
     pub static ref WRITER: Mutex<Writer> = Mutex::new(Writer {
         col_pos: 0,
         color_code: ColorCode::new(Color::Green, Color::Black),
-        buff: unsafe {&mut *(0xb8000 as *mut VgaBuffer)},
+        buff: unsafe { &mut *(0xb8000 as *mut VgaBuffer) },
     });
 }
 
