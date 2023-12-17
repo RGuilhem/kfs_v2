@@ -42,6 +42,7 @@ struct VgaChar {
     color_code: ColorCode,
 }
 
+//#[derive(Debug, Clone, Copy, PartialEq, Eq)]
 #[repr(transparent)]
 struct VgaBuffer {
     chars: [[Volatile<VgaChar>; BUFFER_WIDTH]; BUFFER_HEIGHT],
