@@ -14,6 +14,7 @@ pub extern "C" fn _start() -> ! {
     println!("End of _start");
     #[cfg(test)]
     test_main();
+
     loop {}
 }
 
