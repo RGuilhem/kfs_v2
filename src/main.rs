@@ -12,10 +12,6 @@ pub extern "C" fn _start() -> ! {
     kfs_v2::init();
     println!("Hello World{}", "!");
 
-    unsafe {
-        *(0xdeadbeef as *mut u8) = 42;
-    };
-
     #[cfg(test)]
     test_main();
     loop {}
