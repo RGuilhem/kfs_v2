@@ -15,7 +15,7 @@ pub extern "C" fn _start() -> ! {
     #[cfg(test)]
     test_main();
 
-    loop {}
+    kfs_v2::hlt_loop();
 }
 
 /// This function is called on panic.
@@ -23,7 +23,7 @@ pub extern "C" fn _start() -> ! {
 #[panic_handler]
 fn panic(_info: &PanicInfo) -> ! {
     println!("{}", _info);
-    loop {}
+    kfs_v2::hlt_loop();
 }
 
 #[cfg(test)]
