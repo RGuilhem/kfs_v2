@@ -12,9 +12,9 @@ pub extern "C" fn _start() -> ! {
     kfs_v2::init();
     println!("Hello World{}", "!");
 
-    x86_64::instructions::interrupts::int3();
-
-    println!("Message after breakpoint interrupt");
+    unsafe {
+        *(0xdeadbeef as *mut u8) = 42;
+    };
 
     #[cfg(test)]
     test_main();
