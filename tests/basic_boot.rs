@@ -7,6 +7,7 @@
 use core::panic::PanicInfo;
 use kfs_v2::println;
 
+//Testing environnement before calling init
 #[no_mangle]
 pub extern "C" fn _start() -> ! {
     test_main();
