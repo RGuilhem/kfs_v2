@@ -158,3 +158,20 @@ fn test_println_output() {
         }
     });
 }
+
+#[test_case]
+fn test_println_many_output() {
+    for i in 0..300 {
+        println!("One of many lines {}", i);
+    }
+}
+
+#[test_case]
+fn test_println_long_line() {
+    println!(
+        "A Very long line AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+        klBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB
+        CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+        DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD"
+    );
+}
