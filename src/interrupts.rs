@@ -122,3 +122,9 @@ extern "x86-interrupt" fn page_fault_handler(
 fn test_breakpoint_handler() {
     x86_64::instructions::interrupts::int3();
 }
+
+#[test_case]
+fn test_timer_handler() {
+    unimplemented!();
+    //x86_64::instructions::interrupts::
+}
