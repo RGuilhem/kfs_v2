@@ -6,23 +6,18 @@
 
 use core::panic::PanicInfo;
 use kfs_v2::println;
+use bootloader::{BootInfo, entry_point};
 
-#[no_mangle]
-pub extern "C" fn _start() -> ! {
+entry_point!(kernel_main);
+
+fn kernel_main(_boot_info: &'static BootInfo) -> ! {
+    println!("Kernel Init starting...");
     kfs_v2::init();
-    println!("End of _start");
-
-    use x86_64::registers::control::Cr3;
-
-    let (level_4_page_table, flags) = Cr3::read();
-    println!(
-        "Level 4 page table at: {:?}",
-        level_4_page_table.start_address()
-    );
-    println!("Flags: {:?}", flags);
+    println!("Kernel Init done.");
 
     #[cfg(test)]
     test_main();
+
     kfs_v2::hlt_loop();
 }
 

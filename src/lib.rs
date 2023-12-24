@@ -7,6 +7,19 @@
 
 use core::panic::PanicInfo;
 
+#[cfg(test)]
+use bootloader::{BootInfo, entry_point};
+
+#[cfg(test)]
+entry_point!(test_kernel_main);
+
+#[cfg(test)]
+fn kernel_main(boot_info: &'static BootInfo) -> ! {
+    init();
+    test_main();
+    hlt_loop();
+}
+
 pub mod gdt;
 pub mod interrupts;
 pub mod serial;
@@ -81,6 +94,7 @@ pub fn exit_qemu(exit_code: QemuExitCode) {
 }
 
 pub fn hlt_loop() -> ! {
+    println!("!HALT!");
     loop {
         x86_64::instructions::hlt();
     }
