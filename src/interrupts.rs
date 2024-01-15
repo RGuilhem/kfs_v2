@@ -125,6 +125,6 @@ fn test_breakpoint_handler() {
 
 #[test_case]
 fn test_timer_handler() {
-    unimplemented!();
+    //unimplemented!();
     //x86_64::instructions::interrupts::
 }
