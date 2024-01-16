@@ -1,7 +1,10 @@
-use x86_64::{PhysAddr, structures::paging::{PhysFrame, Size4KiB, OffsetPageTable, PageTable}, VirtAddr};
+use bootloader::bootinfo::MemoryMap;
 use bootloader::bootinfo::MemoryRegionType;
 use x86_64::structures::paging::FrameAllocator;
-use bootloader::bootinfo::MemoryMap;
+use x86_64::{
+    structures::paging::{OffsetPageTable, PageTable, PhysFrame, Size4KiB},
+    PhysAddr, VirtAddr,
+};
 
 pub unsafe fn init(phys_mem_offset: VirtAddr) -> OffsetPageTable<'static> {
     let l4_table = active_l4_table(phys_mem_offset);
