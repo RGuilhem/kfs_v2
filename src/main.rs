@@ -4,11 +4,14 @@
 #![test_runner(kfs_v2::test_runner)]
 #![reexport_test_harness_main = "test_main"]
 
+use bootloader::entry_point;
+use bootloader::BootInfo;
 use core::panic::PanicInfo;
 use kfs_v2::println;
 
-#[no_mangle]
-pub extern "C" fn _start() -> ! {
+entry_point!(kernel_main);
+
+pub fn kernel_main(_boot_info: &'static BootInfo) -> ! {
     println!("Start of _start");
     kfs_v2::init();
 
