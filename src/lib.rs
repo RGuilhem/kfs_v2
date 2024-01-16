@@ -9,6 +9,7 @@
 use bootloader::{BootInfo, entry_point};
 use core::panic::PanicInfo;
 
+pub mod memory;
 pub mod gdt;
 pub mod interrupts;
 pub mod serial;
