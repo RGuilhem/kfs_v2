@@ -1,11 +1,16 @@
+use x86_64::structures::paging::OffsetPageTable;
 use x86_64::PhysAddr;
-use crate::println;
 use x86_64::{
     structures::paging::PageTable,
     VirtAddr,
 };
 
-pub unsafe fn active_l4_table(phys_mem_offset: VirtAddr) -> &'static mut PageTable {
+pub unsafe fn init(phys_mem_offset: VirtAddr) -> OffsetPageTable<'static> {
+    let l4_table = active_l4_table(phys_mem_offset);
+    OffsetPageTable::new(l4_table, phys_mem_offset)
+}
+
+unsafe fn active_l4_table(phys_mem_offset: VirtAddr) -> &'static mut PageTable {
     use x86_64::registers::control::Cr3;
 
     let (l4_table_frame, _) = Cr3::read();
@@ -15,17 +20,6 @@ pub unsafe fn active_l4_table(phys_mem_offset: VirtAddr) -> &'static mut PageTab
     let page_table_ptr: *mut PageTable = virt.as_mut_ptr();
 
     &mut *page_table_ptr
-}
-
-// Mayy be cool to print all mapped level 3 2 and 1 also
-pub fn print_l4_table(phys_mem_offset: VirtAddr) {
-    let l4_table = unsafe {active_l4_table(phys_mem_offset)};
-
-    for (i, entry) in l4_table.iter().enumerate() {
-        if !entry.is_unused() {
-            println!("L4 Entry {}: {:?}", i, entry);
-        }
-    }
 }
 
 pub unsafe fn translate_addr(addr: VirtAddr, phys_mem_offset: VirtAddr) -> Option<PhysAddr> {
@@ -53,7 +47,7 @@ pub unsafe fn translate_addr_inner(addr: VirtAddr, phys_mem_offset: VirtAddr) ->
         frame = match entry.frame() {
             Ok(frame) => frame,
             Err(FrameError::FrameNotPresent) => return None,
-            Err(FrameError::HugeFrame) => panic!("Huge pages not supproted"),
+            Err(FrameError::HugeFrame) => panic!("Huge pages not supported"),
         }
     }
 
