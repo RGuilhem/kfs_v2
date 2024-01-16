@@ -13,10 +13,12 @@ pub mod serial;
 pub mod vga_buffer;
 
 pub fn init() {
+    println!("Start of init");
     gdt::init();
-    interrupts::init_idt();
+    interrupts::init();
     unsafe { interrupts::PICS.lock().initialize() };
     x86_64::instructions::interrupts::enable();
+    println!("End of init");
 }
 
 pub trait Testable {

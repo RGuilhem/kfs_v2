@@ -50,8 +50,10 @@ lazy_static! {
     };
 }
 
-pub fn init_idt() {
+pub fn init() {
+    println!("Start of interrupts::init");
     IDT.load();
+    println!("End of interrupts::init");
 }
 
 extern "x86-interrupt" fn divide_error_handler(stack_frame: InterruptStackFrame) {
