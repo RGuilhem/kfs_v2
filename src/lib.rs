@@ -9,6 +9,8 @@
 use bootloader::{BootInfo, entry_point};
 use core::panic::PanicInfo;
 
+extern crate alloc;
+pub mod allocator;
 pub mod memory;
 pub mod gdt;
 pub mod interrupts;
