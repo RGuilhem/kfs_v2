@@ -9,20 +9,14 @@ use kfs_v2::println;
 
 #[no_mangle]
 pub extern "C" fn _start() -> ! {
+    println!("Start of _start");
     kfs_v2::init();
-    println!("End of _start");
 
-    use x86_64::registers::control::Cr3;
-
-    let (level_4_page_table, flags) = Cr3::read();
-    println!(
-        "Level 4 page table at: {:?}",
-        level_4_page_table.start_address()
-    );
-    println!("Flags: {:?}", flags);
 
     #[cfg(test)]
     test_main();
+
+    println!("End of _start");
     kfs_v2::hlt_loop();
 }
 
