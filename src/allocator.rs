@@ -5,6 +5,8 @@ use x86_64::{
     VirtAddr,
 };
 
+pub mod bump;
+
 use linked_list_allocator::LockedHeap;
 
 #[global_allocator]
@@ -37,4 +39,29 @@ pub fn init_heap(
     };
 
     Ok(())
+}
+
+pub struct Locked<T> {
+    inner: spin::Mutex<T>,
+}
+
+impl<T> Locked<T> {
+    pub const fn new(inner: T) -> Self {
+        Locked {
+            inner: spin::Mutex::new(inner),
+        }
+    }
+
+    pub fn lock(&self) -> spin::MutexGuard<T> {
+        self.inner.lock()
+    }
+}
+
+fn align_up(addr: usize, align: usize) -> usize {
+    let remainder = addr % align;
+    if remainder == 0 {
+        addr // addr already aligned
+    } else {
+        addr - remainder + align
+    }
 }
