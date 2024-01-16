@@ -12,7 +12,6 @@ pub extern "C" fn _start() -> ! {
     println!("Start of _start");
     kfs_v2::init();
 
-
     #[cfg(test)]
     test_main();
 
