@@ -4,6 +4,7 @@
 #![test_runner(kfs_v2::test_runner)]
 #![reexport_test_harness_main = "test_main"]
 
+use x86_64::VirtAddr;
 use bootloader::entry_point;
 use bootloader::BootInfo;
 use core::panic::PanicInfo;
@@ -11,9 +12,13 @@ use kfs_v2::println;
 
 entry_point!(kernel_main);
 
-pub fn kernel_main(_boot_info: &'static BootInfo) -> ! {
+pub fn kernel_main(boot_info: &'static BootInfo) -> ! {
     println!("Start of _start");
     kfs_v2::init();
+
+    use kfs_v2::memory::print_l4_table;
+    let phys_mem_offset = VirtAddr::new(boot_info.physical_memory_offset);
+    print_l4_table(phys_mem_offset);
 
     #[cfg(test)]
     test_main();
