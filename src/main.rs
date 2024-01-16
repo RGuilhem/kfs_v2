@@ -12,7 +12,6 @@ use bootloader::entry_point;
 use bootloader::BootInfo;
 use core::panic::PanicInfo;
 use kfs_v2::println;
-use alloc::boxed::Box;
 
 entry_point!(kernel_main);
 
@@ -29,8 +28,6 @@ pub fn kernel_main(boot_info: &'static BootInfo) -> ! {
     };
 
     allocator::init_heap(&mut mapper, &mut frame_allocator).expect("Heap initialization failed");
-
-    let test_x = Box::new(41);
 
     #[cfg(test)]
     test_main();
