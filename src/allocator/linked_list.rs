@@ -3,6 +3,7 @@ use crate::allocator::align_up;
 use alloc::alloc::{GlobalAlloc, Layout};
 use core::mem;
 use core::ptr;
+use core::ptr::NonNull;
 
 struct ListNode {
     size: usize,
@@ -23,6 +24,7 @@ impl ListNode {
     }
 }
 
+// TODO: implement freed blocks merging
 pub struct LinkedListAllocator {
     head: ListNode,
 }
@@ -91,6 +93,27 @@ impl LinkedListAllocator {
             .pad_to_align();
         let size = layout.size().max(mem::size_of::<ListNode>());
         (size, layout.align())
+    }
+
+    pub unsafe fn allocate_first_fit(&mut self, layout: Layout) -> Result<NonNull<u8>, ()> {
+        let (size, align) = LinkedListAllocator::size_align(layout);
+
+        if let Some((region, alloc_start)) = self.find_region(size, align) {
+            let alloc_end = alloc_start.checked_add(size).expect("Overflow");
+            let excess_size = region.end_addr() - alloc_end;
+            if excess_size > 0 {
+                self.add_free_region(alloc_end, excess_size);
+            }
+            Ok(NonNull::new(alloc_start as *mut u8).expect("Could not create NonNull ptr"))
+        } else {
+            Err(())
+        }
+    }
+
+    pub unsafe fn deallocate(&mut self, ptr: NonNull<u8>, layout: Layout) {
+        let (size, _) = LinkedListAllocator::size_align(layout);
+
+        self.add_free_region(ptr.as_ptr() as usize, size)
     }
 }
 
