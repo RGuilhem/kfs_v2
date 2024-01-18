@@ -57,6 +57,13 @@ impl Executor {
     pub fn run(&mut self) -> ! {
         loop {
             self.run_ready_tasks();
+            self.sleep_if_idle();
+        }
+    }
+
+    fn sleep_if_idle(&self) {
+        if self.task_queue.is_empty() {
+            x86_64::instructions::hlt();
         }
     }
 }
