@@ -12,7 +12,8 @@ use core::panic::PanicInfo;
 use kfs_v2::memory;
 use kfs_v2::println;
 use kfs_v2::task::keyboard;
-use kfs_v2::task::{simple_executor::SimpleExecutor, Task};
+use kfs_v2::task::Task;
+use kfs_v2::task::executor::Executor;
 use x86_64::VirtAddr;
 
 entry_point!(kernel_main);
@@ -37,16 +38,15 @@ pub fn kernel_main(boot_info: &'static BootInfo) -> ! {
     let mut frame_allocator = unsafe { BootInfoFrameAllocator::init(&boot_info.memory_map) };
     allocator::init_heap(&mut mapper, &mut frame_allocator).expect("Heap initialization failed");
 
-    let mut executor = SimpleExecutor::new();
+    let mut executor = Executor::new();
     executor.spawn(Task::new(example_task()));
     executor.spawn(Task::new(keyboard::print_keypresses()));
-    executor.run();
 
     #[cfg(test)]
     test_main();
 
     println!("End of _start");
-    kfs_v2::hlt_loop();
+    executor.run();
 }
 
 /// This function is called on panic.

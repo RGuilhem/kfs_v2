@@ -7,7 +7,6 @@ use x86_64::structures::idt::PageFaultErrorCode;
 
 use crate::gdt;
 use crate::hlt_loop;
-use crate::print;
 use crate::println;
 
 pub const PIC_1_OFFSET: u8 = 32;
