@@ -1,10 +1,10 @@
+use crate::allocator::bump::BumpAllocator;
 use x86_64::{
     structures::paging::{
         mapper::MapToError, FrameAllocator, Mapper, Page, PageTableFlags, Size4KiB,
     },
     VirtAddr,
 };
-use crate::allocator::bump::BumpAllocator;
 
 pub mod bump;
 
