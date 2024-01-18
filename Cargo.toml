@@ -14,13 +14,30 @@ uart_16550 = "0.2.0"
 pic8259 = "0.10.1"
 pc-keyboard = "0.5.0"
 
-[package.metadata.bootloader]
-# This is used to customize the memory offset
-#physical-memory-offset = "0x0000f00000000000"
+# Atomic push and pop queues
+[dependencies.crossbeam-queue]
+version = "0.2.1"
+default-features = false
+features = ["alloc"]
+
+# One time init of static values
+[dependencies.conquer-once]
+version = "0.2.0"
+default-features = false
+
+# Used for Stream type
+[dependencies.futures-util]
+version = "0.3.4"
+default-features = false
+features = ["alloc"]
 
 [dependencies.lazy_static]
 version = "1.0"
 features = ["spin_no_std"]
+
+[package.metadata.bootloader]
+# This is used to customize the memory offset
+#physical-memory-offset = "0x0000f00000000000"
 
 [package.metadata.bootimage]
 test-args = ["-device", "isa-debug-exit,iobase=0xf4,iosize=0x04", "-serial", "stdio",

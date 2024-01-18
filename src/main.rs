@@ -11,8 +11,9 @@ use bootloader::BootInfo;
 use core::panic::PanicInfo;
 use kfs_v2::memory;
 use kfs_v2::println;
+use kfs_v2::task::keyboard;
+use kfs_v2::task::{simple_executor::SimpleExecutor, Task};
 use x86_64::VirtAddr;
-use kfs_v2::task::{Task, simple_executor::SimpleExecutor};
 
 entry_point!(kernel_main);
 
@@ -38,6 +39,7 @@ pub fn kernel_main(boot_info: &'static BootInfo) -> ! {
 
     let mut executor = SimpleExecutor::new();
     executor.spawn(Task::new(example_task()));
+    executor.spawn(Task::new(keyboard::print_keypresses()));
     executor.run();
 
     #[cfg(test)]
