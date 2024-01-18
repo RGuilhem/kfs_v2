@@ -7,6 +7,8 @@ use x86_64::{
     VirtAddr,
 };
 
+// TODO: Maybe add a slab allocator
+// TODO: Maybe add a buddy allocator
 pub mod bump;
 pub mod fixed_size_block;
 pub mod linked_list;

@@ -16,6 +16,9 @@ pub struct FixedSizeBlockAllocator {
     fallback_allocator: LinkedListAllocator,
 }
 
+// TODO: instead of falling back to a LinkedListAllocator use a paging allocator and add block
+// sizes up to 4KiB
+// TODO: max block_size length and free blocks to unfragment allocator
 impl FixedSizeBlockAllocator {
     pub const fn new() -> Self {
         const EMPTY: Option<&'static mut ListNode> = None;
