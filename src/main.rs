@@ -18,15 +18,6 @@ use x86_64::VirtAddr;
 
 entry_point!(kernel_main);
 
-async fn async_number() -> u32 {
-    42
-}
-
-async fn example_task() {
-    let number = async_number().await;
-    println!("async_number: {}", number);
-}
-
 pub fn kernel_main(boot_info: &'static BootInfo) -> ! {
     use crate::memory::BootInfoFrameAllocator;
     use kfs_v2::allocator;
@@ -39,7 +30,6 @@ pub fn kernel_main(boot_info: &'static BootInfo) -> ! {
     allocator::init_heap(&mut mapper, &mut frame_allocator).expect("Heap initialization failed");
 
     let mut executor = Executor::new();
-    executor.spawn(Task::new(example_task()));
     executor.spawn(Task::new(keyboard::print_keypresses()));
 
     #[cfg(test)]

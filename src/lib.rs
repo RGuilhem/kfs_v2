@@ -20,12 +20,12 @@ pub mod vga_buffer;
 pub mod task;
 
 pub fn init() {
-    println!("Start of init");
+    println!("Start of KFS init");
     gdt::init();
     interrupts::init();
     unsafe { interrupts::PICS.lock().initialize() };
     x86_64::instructions::interrupts::enable();
-    println!("End of init");
+    println!("End of KFS init");
 }
 
 pub trait Testable {

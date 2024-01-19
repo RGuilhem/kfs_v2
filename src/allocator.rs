@@ -1,5 +1,6 @@
 use crate::allocator::fixed_size_block::FixedSizeBlockAllocator;
 use crate::allocator::linked_list::LinkedListAllocator;
+use crate::println;
 use x86_64::{
     structures::paging::{
         mapper::MapToError, FrameAllocator, Mapper, Page, PageTableFlags, Size4KiB,
@@ -43,6 +44,7 @@ pub fn init_heap(
         ALLOCATOR.lock().init(HEAP_START, HEAP_SIZE);
     };
 
+    println!("Heap initialization done");
     Ok(())
 }
 
