@@ -13,7 +13,15 @@ cargo install bootimage
 
 ## Next steps
 
-- [ ] Processes / Multitasking / Scheduler
+### Processes
+
+- [ ] kernel threads (basically processes??)
+    - [ ] task scheduler (kernel scheduler with priority)
+- [ ] user threads (pthreads)
+    - [ ] user-level scheduler
+
+### Other
+
 - [ ] Filesystem
 - [ ] Syscalls / Sockets / User land
-- [ ] Module interface and loading
+- [ ] Module interface and loading (reincaranation server and service user program)
