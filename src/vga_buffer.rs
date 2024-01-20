@@ -114,7 +114,18 @@ impl Writer {
             }
         }
         self.clear_row(BUFFER_HEIGHT - 1);
+        self.clear_dots();
         self.col_pos = 0;
+    }
+
+    fn clear_dots(&mut self) {
+        let blank = VgaChar {
+            ascii_char: b' ',
+            color_code: self.color_code,
+        };
+        for i in 0..(BUFFER_HEIGHT - 2) {
+            self.buff.chars[i][BUFFER_WIDTH - 1].write(blank);
+        }
     }
 
     pub fn clear_row(&mut self, row: usize) {
@@ -178,6 +189,29 @@ pub fn _print(args: fmt::Arguments) {
     });
     #[cfg(not(test))]
     serial_print!("{}", args);
+}
+
+/// Called by the timer_interrupt_handler
+///
+/// Must not block or allocate
+pub(crate) fn toggle_dot() {
+    use x86_64::instructions::interrupts;
+    interrupts::without_interrupts(|| {
+        // NOTE: not really sure without_interrupts needed
+        let mut writer = WRITER.lock();
+        let current = writer.buff.chars[BUFFER_HEIGHT - 1][BUFFER_WIDTH - 1].read();
+        let color = writer.color_code;
+        writer.buff.chars[BUFFER_HEIGHT - 1][BUFFER_WIDTH - 1].write(VgaChar {
+            ascii_char: {
+                if current.ascii_char == b' ' {
+                    b'.'
+                } else {
+                    b' '
+                }
+            },
+            color_code: color,
+        });
+    });
 }
 
 #[test_case]
