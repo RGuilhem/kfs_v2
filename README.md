@@ -10,7 +10,7 @@ cargo install bootimage
 
 - [ ] implement scroll support??
 - [x] backspace handling
-- [ ] cursor support
+- [x] cursor support
 - [ ] Debugger to show info (using keyboard driver)
 
 ## Next steps

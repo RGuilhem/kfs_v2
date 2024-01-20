@@ -24,6 +24,7 @@ pub enum Color {
 use crate::serial_print;
 
 use volatile::Volatile;
+use x86_64::instructions::port::Port;
 
 const BUFFER_WIDTH: usize = 80;
 const BUFFER_HEIGHT: usize = 25;
@@ -72,19 +73,36 @@ impl Writer {
                 self.col_pos += 1;
             }
         }
+        self.update_cursor();
     }
 
     pub fn write_non_print(&mut self, byte: u8) {
-        if byte == 8 { // handle backspace
+        if byte == 8 {
+            // handle backspace
             if self.col_pos > 0 {
                 self.col_pos -= 1;
             }
+            self.update_cursor();
             self.buff.chars[BUFFER_HEIGHT - 1][self.col_pos].write(VgaChar {
                 ascii_char: b' ',
                 color_code: self.color_code,
             });
         } else {
             self.write_byte(0xfe);
+        }
+    }
+
+    fn update_cursor(&mut self) {
+        let mut port_control = Port::new(0x3d4);
+        let mut port_data = Port::new(0x3d5);
+        let pos: u16 = ((BUFFER_HEIGHT - 1) * BUFFER_WIDTH + self.col_pos)
+            .try_into()
+            .expect("Vga cursor pos overflow");
+        unsafe {
+            port_control.write(0x0f as u8);
+            port_data.write((pos & 0xff) as u8);
+            port_control.write(0x0e as u8);
+            port_data.write(((pos >> 8) & 0xff) as u8);
         }
     }
 
