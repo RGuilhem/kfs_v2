@@ -1,4 +1,5 @@
-use spin::Mutex;
+use crate::alloc::string::ToString;
+use crate::task::console::debug_command;
 use crate::{print, println};
 use alloc::string::String;
 use conquer_once::spin::OnceCell;
@@ -11,6 +12,7 @@ use futures_util::task::AtomicWaker;
 use lazy_static::lazy_static;
 use pc_keyboard::KeyCode;
 use pc_keyboard::{layouts, DecodedKey, HandleControl, Keyboard, ScancodeSet1};
+use spin::Mutex;
 
 static WAKER: AtomicWaker = AtomicWaker::new();
 static SCANCODE_QUEUE: OnceCell<ArrayQueue<u8>> = OnceCell::uninit();
@@ -74,10 +76,9 @@ fn handle_unicode(c: char) {
     if c != '\n' {
         line.push(c);
     } else {
-        println!("{}", *line);
+        debug_command(&*line);
         line.clear();
     }
-
 }
 
 fn handle_raw(key: KeyCode) {
@@ -88,6 +89,7 @@ pub async fn handle_keypress() {
     let mut scancodes = ScancodeStream::new();
     let mut keyboard = Keyboard::new(layouts::Us104Key, ScancodeSet1, HandleControl::Ignore);
 
+    debug_command(&"help".to_string());
     while let Some(scancode) = scancodes.next().await {
         if let Ok(Some(key_event)) = keyboard.add_byte(scancode) {
             if let Some(key) = keyboard.process_keyevent(key_event) {

@@ -4,6 +4,7 @@ use core::sync::atomic::Ordering;
 use core::task::{Context, Poll};
 use core::{future::Future, pin::Pin};
 
+pub mod console;
 pub mod keyboard;
 pub mod simple_executor;
 pub mod executor;
