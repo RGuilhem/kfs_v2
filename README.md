@@ -12,6 +12,10 @@ cargo install bootimage
 - [x] backspace handling
 - [x] cursor support
 - [ ] Debugger to show info (using keyboard driver)
+    - [ ] print heap info
+    - [ ] print allocator info
+    - [ ] print mapping info
+    - [ ] print stack
 
 ## Next steps
 
