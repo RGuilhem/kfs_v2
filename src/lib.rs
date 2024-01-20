@@ -11,6 +11,7 @@ use bootloader::{entry_point, BootInfo};
 use core::panic::PanicInfo;
 
 extern crate alloc;
+pub mod proc;
 pub mod allocator;
 pub mod gdt;
 pub mod interrupts;
