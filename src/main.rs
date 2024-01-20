@@ -30,7 +30,7 @@ pub fn kernel_main(boot_info: &'static BootInfo) -> ! {
     allocator::init_heap(&mut mapper, &mut frame_allocator).expect("Heap initialization failed");
 
     let mut executor = Executor::new();
-    executor.spawn(Task::new(keyboard::print_keypresses()));
+    executor.spawn(Task::new(keyboard::handle_keypress()));
 
     #[cfg(test)]
     test_main();

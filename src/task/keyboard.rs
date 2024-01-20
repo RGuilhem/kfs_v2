@@ -1,4 +1,6 @@
+use spin::Mutex;
 use crate::{print, println};
+use alloc::string::String;
 use conquer_once::spin::OnceCell;
 use core::pin::Pin;
 use core::task::{Context, Poll};
@@ -6,6 +8,8 @@ use crossbeam_queue::ArrayQueue;
 use futures_util::stream::Stream;
 use futures_util::stream::StreamExt;
 use futures_util::task::AtomicWaker;
+use lazy_static::lazy_static;
+use pc_keyboard::KeyCode;
 use pc_keyboard::{layouts, DecodedKey, HandleControl, Keyboard, ScancodeSet1};
 
 static WAKER: AtomicWaker = AtomicWaker::new();
@@ -60,17 +64,36 @@ impl Stream for ScancodeStream {
     }
 }
 
-pub async fn print_keypresses() {
+fn handle_unicode(c: char) {
+    lazy_static! {
+        static ref LINE: Mutex<String> = Mutex::new(String::new());
+    }
+    print!("{}", c);
+
+    let mut line = LINE.lock();
+    if c != '\n' {
+        line.push(c);
+    } else {
+        println!("{}", *line);
+        line.clear();
+    }
+
+}
+
+fn handle_raw(key: KeyCode) {
+    print!("{:?}", key);
+}
+
+pub async fn handle_keypress() {
     let mut scancodes = ScancodeStream::new();
-    let mut keyboard = Keyboard::new(layouts::Us104Key, ScancodeSet1,
-        HandleControl::Ignore);
+    let mut keyboard = Keyboard::new(layouts::Us104Key, ScancodeSet1, HandleControl::Ignore);
 
     while let Some(scancode) = scancodes.next().await {
         if let Ok(Some(key_event)) = keyboard.add_byte(scancode) {
             if let Some(key) = keyboard.process_keyevent(key_event) {
                 match key {
-                    DecodedKey::Unicode(character) => print!("{}", character),
-                    DecodedKey::RawKey(key) => print!("{:?}", key),
+                    DecodedKey::Unicode(character) => handle_unicode(character),
+                    DecodedKey::RawKey(key) => handle_raw(key),
                 }
             }
         }
