@@ -15,6 +15,9 @@ pub fn debug_command(line: &String) {
         match command {
             "help" => help(),
             "exit" => exit(),
+            "translate" => translate(args),
+            "t" => translate(args),
+            "regs" => regs(args),
             &_ => unknown_command(),
         }
     }
@@ -30,6 +33,28 @@ fn help() {
 fn exit() {
     // TODO: handle cleanup before exit
     exit_qemu(QemuExitCode::Success);
+}
+
+fn regs(_args: &[&str]) {
+    use x86_64::instructions::tables;
+    use x86_64::registers::control;
+    use x86_64::registers::rflags;
+
+    println!("Cr0: {:?}", control::Cr0::read());
+    println!("Cr2 PFLA: {:?}", control::Cr2::read());
+    println!("Cr3: {:?}", control::Cr3::read());
+    println!("Cr4: {:?}", control::Cr4::read());
+    println!("{:?}", rflags::read());
+
+    println!("\nGDT: {:?}", tables::sgdt());
+    println!("IDT: {:?}", tables::sidt());
+}
+
+fn translate(_args: &[&str]) {
+    use x86_64::VirtAddr;
+
+    let _addr = VirtAddr::new(0);
+    println!("Translating addresses is not implemented yet");
 }
 
 fn unknown_command() {
