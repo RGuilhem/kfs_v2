@@ -70,14 +70,20 @@ fn handle_unicode(c: char) {
     lazy_static! {
         static ref LINE: Mutex<String> = Mutex::new(String::new());
     }
-    print!("{}", c);
 
     let mut line = LINE.lock();
-    if c != '\n' {
-        line.push(c);
-    } else {
+    if c == '\n' {
+        print!("{}", c);
         debug_command(&*line);
         line.clear();
+    } else if c as u8 == 8 { // 8 is the backspace character
+        if !line.is_empty() {
+            print!("{}", c);
+            line.pop();
+        }
+    } else {
+        print!("{}", c);
+        line.push(c);
     }
 }
 

@@ -74,6 +74,20 @@ impl Writer {
         }
     }
 
+    pub fn write_non_print(&mut self, byte: u8) {
+        if byte == 8 { // handle backspace
+            if self.col_pos > 0 {
+                self.col_pos -= 1;
+            }
+            self.buff.chars[BUFFER_HEIGHT - 1][self.col_pos].write(VgaChar {
+                ascii_char: b' ',
+                color_code: self.color_code,
+            });
+        } else {
+            self.write_byte(0xfe);
+        }
+    }
+
     pub fn new_line(&mut self) {
         for row in 1..BUFFER_HEIGHT {
             for col in 0..BUFFER_WIDTH {
@@ -99,7 +113,7 @@ impl Writer {
         for byte in string.bytes() {
             match byte {
                 0x20..=0x7e | b'\n' => self.write_byte(byte),
-                _ => self.write_byte(0xfe),
+                non_print => self.write_non_print(non_print),
             }
         }
     }
