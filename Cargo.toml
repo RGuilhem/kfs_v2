@@ -44,7 +44,7 @@ test-args = ["-device", "isa-debug-exit,iobase=0xf4,iosize=0x04", "-serial", "st
     "-display", "none" ]
 test-success-exit-code = 33
 test-timeout = 60 #timeout in seconds
-run-args = ["-serial", "stdio"]
+run-args = ["-serial", "stdio", "-device", "isa-debug-exit,iobase=0xf4,iosize=0x04"]
 
 [[test]]
 name = "should_panic"

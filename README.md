@@ -9,6 +9,8 @@ cargo install bootimage
 ## TODO
 
 - [ ] Complete the keyboard driver (eg. get_line)
+- [ ] implement scroll support??
+- [ ] backspace handling
 - [ ] Debugger to show info (using keyboard driver)
 
 ## Next steps
