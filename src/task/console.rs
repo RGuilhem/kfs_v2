@@ -13,18 +13,23 @@ pub fn debug_command(line: &String) {
         println!("DEBUG: command: {}", command);
         println!("DEBUG: args: {:?}", args);
         match command {
-            "help" => display_help(),
-            "exit" => exit_qemu(QemuExitCode::Success),
+            "help" => help(),
+            "exit" => exit(),
             &_ => unknown_command(),
         }
     }
     print!("\n> ");
 }
 
-fn display_help() {
+fn help() {
     println!("Debug commands:");
     println!("help: print this help message");
     println!("exit: exit qemu");
+}
+
+fn exit() {
+    // TODO: handle cleanup before exit
+    exit_qemu(QemuExitCode::Success);
 }
 
 fn unknown_command() {
