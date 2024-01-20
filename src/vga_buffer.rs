@@ -20,7 +20,9 @@ pub enum Color {
     White = 15,
 }
 
+#[cfg(not(test))]
 use crate::serial_print;
+
 use volatile::Volatile;
 
 const BUFFER_WIDTH: usize = 80;
@@ -142,6 +144,7 @@ pub fn _print(args: fmt::Arguments) {
     interrupts::without_interrupts(|| {
         WRITER.lock().write_fmt(args).unwrap();
     });
+    #[cfg(not(test))]
     serial_print!("{}", args);
 }
 
