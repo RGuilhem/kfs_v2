@@ -61,6 +61,7 @@ extern "x86-interrupt" fn divide_error_handler(stack_frame: InterruptStackFrame)
 
 extern "x86-interrupt" fn breakpoint_handler(stack_frame: InterruptStackFrame) {
     println!("Exception: BREAKPOINT\n{:#?}", stack_frame);
+    //hlt_loop(); TODO: a handler to stop and wait would be cool
 }
 
 extern "x86-interrupt" fn double_fault_handler(stack_frame: InterruptStackFrame, _error: u64) -> ! {

@@ -11,9 +11,9 @@ use bootloader::BootInfo;
 use core::panic::PanicInfo;
 use kfs_v2::memory;
 use kfs_v2::println;
+use kfs_v2::task::executor::Executor;
 use kfs_v2::task::keyboard;
 use kfs_v2::task::Task;
-use kfs_v2::task::executor::Executor;
 use x86_64::VirtAddr;
 
 entry_point!(kernel_main);
