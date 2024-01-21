@@ -2,6 +2,22 @@ use crate::println;
 use core::sync::atomic::AtomicU64;
 use core::sync::atomic::Ordering;
 
+/// INFO:
+/// Long term: Decides which Processes are to
+/// be admitted to the ready Queue and loaded to
+/// main memory
+///
+/// Medium term: Decides which processes should be
+/// swapped out or swapped in
+///
+/// Short term: After clock interrupt, io iterrupt,
+/// syscall or other signal. Decides which of the
+/// ready in memory processes to run
+///
+/// Dispatcher: handles context switch, going to
+/// user mode and restarting user program at
+/// correct location
+///
 pub mod scheduler;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
@@ -24,7 +40,7 @@ pub enum ProcessStatus {
 }
 
 /// representation of a process
-/// 
+///
 /// id
 /// status
 /// father
@@ -37,6 +53,7 @@ pub struct Process {
     status: ProcessStatus,
 }
 
+/// TODO: is this needed?
 impl Process {
     pub fn new() -> Self {
         Process {
