@@ -41,6 +41,7 @@ pub enum ProcessStatus {
     Dead,
 }
 
+/// INFO:
 /// See this link
 /// https://en.wikipedia.org/wiki/Process_control_block
 pub struct Process {

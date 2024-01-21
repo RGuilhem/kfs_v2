@@ -72,6 +72,7 @@ fn handle_unicode(c: char) {
     }
 
     let mut line = LINE.lock();
+    // TODO: refactor
     if c == '\n' {
         print!("{}", c);
         debug_command(&*line);
