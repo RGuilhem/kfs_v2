@@ -19,7 +19,7 @@ pub fn debug_command(line: &String) {
             "exit" => exit(),
             "translate" => translate(args),
             "t" => translate(args),
-            "int" => int(),
+            "int" => int(args),
             "regs" => regs(args),
             &_ => unknown_command(),
         }
@@ -27,7 +27,7 @@ pub fn debug_command(line: &String) {
     print!("\n> ");
 }
 
-fn int() {
+fn int(_args: &[&str]) {
     unsafe { software_interrupt!(0x80) };
 }
 

@@ -47,7 +47,7 @@ lazy_static! {
         idt.page_fault.set_handler_fn(page_fault_handler);
         idt[InterruptIndex::Timer.as_usize()].set_handler_fn(timer_interrupt_handler);
         idt[InterruptIndex::Keyboard.as_usize()].set_handler_fn(keyboard_interrupt_handler);
-        idt[InterruptIndex::Software.as_usize()].set_handler_fn(sowftware_interrupt_handler);
+        idt[InterruptIndex::Software.as_usize()].set_handler_fn(software_interrupt_handler);
         idt
     };
 }
@@ -108,7 +108,7 @@ extern "x86-interrupt" fn page_fault_handler(
     hlt_loop(); //TODO handle the fault
 }
 
-extern "x86-interrupt" fn sowftware_interrupt_handler(stack_frame: InterruptStackFrame) {
+extern "x86-interrupt" fn software_interrupt_handler(stack_frame: InterruptStackFrame) {
     println!("INTERRUPT: Software:");
     println!("{:#?}", stack_frame);
 }
@@ -116,10 +116,4 @@ extern "x86-interrupt" fn sowftware_interrupt_handler(stack_frame: InterruptStac
 #[test_case]
 fn test_breakpoint_handler() {
     x86_64::instructions::interrupts::int3();
-}
-
-#[test_case]
-fn test_timer_handler() {
-    //unimplemented!();
-    //x86_64::instructions::interrupts::
 }
