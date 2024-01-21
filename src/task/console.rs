@@ -4,6 +4,8 @@ use crate::println;
 use crate::QemuExitCode;
 use alloc::string::String;
 use alloc::vec::Vec;
+use core::arch::asm;
+use x86_64::software_interrupt;
 
 pub fn debug_command(line: &String) {
     if line.len() > 0 {
@@ -17,11 +19,16 @@ pub fn debug_command(line: &String) {
             "exit" => exit(),
             "translate" => translate(args),
             "t" => translate(args),
+            "int" => int(),
             "regs" => regs(args),
             &_ => unknown_command(),
         }
     }
     print!("\n> ");
+}
+
+fn int() {
+    unsafe { software_interrupt!(0x80) };
 }
 
 fn help() {

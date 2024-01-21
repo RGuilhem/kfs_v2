@@ -1,6 +1,7 @@
 #![no_std]
 #![cfg_attr(test, no_main)]
 #![feature(custom_test_frameworks)]
+#![feature(asm_const)]
 #![feature(const_mut_refs)]
 #![feature(abi_x86_interrupt)]
 #![test_runner(crate::test_runner)]
@@ -11,14 +12,14 @@ use bootloader::{entry_point, BootInfo};
 use core::panic::PanicInfo;
 
 extern crate alloc;
-pub mod proc;
 pub mod allocator;
 pub mod gdt;
 pub mod interrupts;
 pub mod memory;
+pub mod proc;
 pub mod serial;
-pub mod vga_buffer;
 pub mod task;
+pub mod vga_buffer;
 
 pub fn init() {
     println!("Start of KFS init");

@@ -11,6 +11,7 @@ use crate::println;
 
 pub const PIC_1_OFFSET: u8 = 32;
 pub const PIC_2_OFFSET: u8 = PIC_1_OFFSET + 8;
+pub const SOFTWARE_OFFSET: u8 = 0x80;
 
 pub static PICS: spin::Mutex<ChainedPics> =
     spin::Mutex::new(unsafe { ChainedPics::new(PIC_1_OFFSET, PIC_2_OFFSET) });
@@ -20,6 +21,7 @@ pub static PICS: spin::Mutex<ChainedPics> =
 pub enum InterruptIndex {
     Timer = PIC_1_OFFSET,
     Keyboard,
+    Software = SOFTWARE_OFFSET,
 }
 
 impl InterruptIndex {
@@ -45,6 +47,7 @@ lazy_static! {
         idt.page_fault.set_handler_fn(page_fault_handler);
         idt[InterruptIndex::Timer.as_usize()].set_handler_fn(timer_interrupt_handler);
         idt[InterruptIndex::Keyboard.as_usize()].set_handler_fn(keyboard_interrupt_handler);
+        idt[InterruptIndex::Software.as_usize()].set_handler_fn(sowftware_interrupt_handler);
         idt
     };
 }
@@ -103,6 +106,11 @@ extern "x86-interrupt" fn page_fault_handler(
     println!("error_code: {:?}", error_code);
     println!("{:#?}", stack_frame);
     hlt_loop(); //TODO handle the fault
+}
+
+extern "x86-interrupt" fn sowftware_interrupt_handler(stack_frame: InterruptStackFrame) {
+    println!("INTERRUPT: Software:");
+    println!("{:#?}", stack_frame);
 }
 
 #[test_case]
