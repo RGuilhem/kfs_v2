@@ -15,10 +15,12 @@ impl ProcessId {
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
-/// TODO: think about the kind of statuses
 pub enum ProcessStatus {
-    Run,
-    Sleep,
+    Created,
+    Ready,
+    Running,
+    Blocked,
+    Terminated,
 }
 
 /// representation of a process
@@ -39,7 +41,7 @@ impl Process {
     pub fn new() -> Self {
         Process {
             id: ProcessId::new(),
-            status: ProcessStatus::Run,
+            status: ProcessStatus::Created,
         }
     }
 
