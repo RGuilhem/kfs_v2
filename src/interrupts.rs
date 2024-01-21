@@ -108,6 +108,7 @@ extern "x86-interrupt" fn page_fault_handler(
     hlt_loop(); //TODO handle the fault
 }
 
+/// See: https://en.wikipedia.org/wiki/System_call
 extern "x86-interrupt" fn software_interrupt_handler(stack_frame: InterruptStackFrame) {
     println!("INTERRUPT: Software:");
     println!("{:#?}", stack_frame);

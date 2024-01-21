@@ -3,6 +3,7 @@ use core::sync::atomic::AtomicU64;
 use core::sync::atomic::Ordering;
 
 /// INFO:
+/// https://en.wikipedia.org/wiki/Scheduling_(computing)
 /// Long term: Decides which Processes are to
 /// be admitted to the ready Queue and loaded to
 /// main memory
@@ -36,20 +37,17 @@ pub enum ProcessStatus {
     Ready,
     Running,
     Blocked,
-    Terminated,
+    Waiting,
+    Dead,
 }
 
-/// representation of a process
-///
-/// id
-/// status
-/// father
-/// children
-/// stack pointer and heap (paging info)
-/// signals queue
-/// owner id
+/// See this link
+/// https://en.wikipedia.org/wiki/Process_control_block
 pub struct Process {
+    // Identification
     id: ProcessId,
+    // State
+    // Control
     status: ProcessStatus,
 }
 
