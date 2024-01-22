@@ -4,7 +4,7 @@
 use crate::proc::context::ProcessContext;
 use core::sync::atomic::{AtomicU64, Ordering};
 use x86_64::structures::idt::InterruptStackFrame;
-use x86_64::structures::paging::OffsetPageTable;
+use x86_64::structures::paging::PageTable;
 use x86_64::PrivilegeLevel;
 
 pub mod context;
@@ -63,7 +63,7 @@ pub struct Process {
 }
 
 impl Process {
-    pub fn init(page_table: OffsetPageTable<'static>, stack_frame: InterruptStackFrame) -> Self {
+    pub fn init(page_table: PageTable, stack_frame: InterruptStackFrame) -> Self {
         let id = ProcessId::new();
         Self {
             id,
@@ -73,4 +73,10 @@ impl Process {
             status: ProcessStatus::Created,
         }
     }
+}
+
+#[test_case]
+fn firs_process_id_is_0() {
+    let id = ProcessId::new();
+    assert_eq!(0, id.0);
 }

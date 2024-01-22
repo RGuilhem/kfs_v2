@@ -1,16 +1,16 @@
+use x86_64::structures::paging::PageTable;
 use core::arch::asm;
 use x86_64::structures::idt::InterruptStackFrame;
-use x86_64::structures::paging::OffsetPageTable;
 
 #[derive(Debug)]
 pub struct ProcessContext {
-    page_table: OffsetPageTable<'static>,
+    page_table: PageTable,
     stack_frame: InterruptStackFrame,
     registers: Registers,
 }
 
 impl ProcessContext {
-    pub fn new(page_table: OffsetPageTable<'static>, stack_frame: InterruptStackFrame) -> Self {
+    pub fn new(page_table: PageTable, stack_frame: InterruptStackFrame) -> Self {
         Self {
             page_table,
             stack_frame,
