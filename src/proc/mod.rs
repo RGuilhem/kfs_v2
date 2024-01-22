@@ -2,6 +2,7 @@
 #![allow(dead_code)]
 
 use crate::proc::context::ProcessContext;
+use alloc::vec::Vec;
 use core::sync::atomic::{AtomicU64, Ordering};
 use x86_64::structures::idt::InterruptStackFrame;
 use x86_64::structures::paging::PageTable;
@@ -59,7 +60,7 @@ pub struct Process {
     status: ProcessStatus,
     father: ProcessId,
     privilege: PrivilegeLevel,
-    //children: ProcessId[],
+    children: Vec<ProcessId>,
 }
 
 impl Process {
@@ -69,6 +70,7 @@ impl Process {
             id,
             context: ProcessContext::new(page_table, stack_frame),
             father: id,
+            children: Vec::new(),
             privilege: PrivilegeLevel::Ring0,
             status: ProcessStatus::Created,
         }
