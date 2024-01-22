@@ -1,5 +1,6 @@
-use x86_64::structures::paging::OffsetPageTable;
+use core::arch::asm;
 use x86_64::structures::idt::InterruptStackFrame;
+use x86_64::structures::paging::OffsetPageTable;
 
 pub struct ProcessContext {
     page_table: OffsetPageTable<'static>,
@@ -34,16 +35,23 @@ pub struct Registers {
     bx: u16,
     cx: u16,
     dx: u16,
-    // 8 bits
-    ah: u8,
-    al: u8,
-    bh: u8,
-    bl: u8,
-    ch: u8,
-    cl: u8,
-    dh: u8,
-    dl: u8,
+    // 8 bits Not used??
 }
 
 impl Registers {
+    #[inline]
+    pub unsafe fn save(&mut self) {
+        asm!("mov {0}, rax", out(reg) self.rax);
+        asm!("mov rax, rbx", out("rax") self.rbx);
+        asm!("mov rax, rcx", out("rax") self.rcx);
+        asm!("mov rax, rdx", out("rax") self.rdx);
+        asm!("mov {0:e}, eax", out(reg) self.eax);
+        asm!("mov eax, ebx", out("eax") self.ebx);
+        asm!("mov eax, ecx", out("eax") self.ecx);
+        asm!("mov eax, edx", out("eax") self.edx);
+        asm!("mov {0:x}, ax", out(reg) self.ax);
+        asm!("mov ax, bx", out("ax") self.bx);
+        asm!("mov ax, cx", out("ax") self.cx);
+        asm!("mov ax, dx", out("ax") self.dx);
+    }
 }
