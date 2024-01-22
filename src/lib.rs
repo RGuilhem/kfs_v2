@@ -64,6 +64,7 @@ pub fn test_panic_handler(info: &PanicInfo) -> ! {
 entry_point!(test_kernel_main);
 
 /// Entry point for `cargo test`
+/// TODO: setup allocator
 #[cfg(test)]
 pub fn test_kernel_main(_boot_info: &'static BootInfo) -> ! {
     init();

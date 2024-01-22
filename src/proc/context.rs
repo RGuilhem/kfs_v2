@@ -2,6 +2,7 @@ use core::arch::asm;
 use x86_64::structures::idt::InterruptStackFrame;
 use x86_64::structures::paging::OffsetPageTable;
 
+#[derive(Debug)]
 pub struct ProcessContext {
     page_table: OffsetPageTable<'static>,
     stack_frame: InterruptStackFrame,
@@ -18,7 +19,7 @@ impl ProcessContext {
     }
 }
 
-#[derive(Default)]
+#[derive(Default, Debug)]
 pub struct Registers {
     // 64 bits
     rax: u64,
