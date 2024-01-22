@@ -7,6 +7,7 @@ use x86_64::structures::idt::InterruptStackFrame;
 use x86_64::structures::paging::OffsetPageTable;
 use x86_64::PrivilegeLevel;
 
+pub mod context;
 /// INFO:
 /// https://en.wikipedia.org/wiki/Scheduling_(computing)
 /// Long term: Decides which Processes are to
@@ -25,7 +26,6 @@ use x86_64::PrivilegeLevel;
 /// correct location
 ///
 pub mod scheduler;
-pub mod context;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
 pub struct ProcessId(u64);

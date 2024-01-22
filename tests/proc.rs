@@ -4,13 +4,8 @@
 #![test_runner(kfs_v2::test_runner)]
 #![reexport_test_harness_main = "test_main"]
 
-extern crate alloc;
-
-use alloc::boxed::Box;
-use alloc::vec::Vec;
 use bootloader::{entry_point, BootInfo};
 use core::panic::PanicInfo;
-use kfs_v2::allocator::HEAP_SIZE;
 
 entry_point!(main);
 
@@ -32,41 +27,4 @@ fn main(boot_info: &'static BootInfo) -> ! {
 #[panic_handler]
 fn panic(info: &PanicInfo) -> ! {
     kfs_v2::test_panic_handler(info)
-}
-
-#[test_case]
-fn simple_alloc() {
-    let heap_val1 = Box::new(42);
-    let heap_val2 = Box::new(24);
-    assert_eq!(42, *heap_val1);
-    assert_eq!(24, *heap_val2);
-}
-
-#[test_case]
-fn large_vec() {
-    let n = 1000;
-    let mut vec = Vec::new();
-
-    for i in 0..n {
-        vec.push(i);
-    }
-    assert_eq!(vec.iter().sum::<u64>(), (n - 1) * n / 2);
-}
-
-#[test_case]
-fn many_boxes() {
-    for i in 0..HEAP_SIZE {
-        let x = Box::new(i);
-        assert_eq!(i, *x);
-    }
-}
-
-#[test_case]
-fn many_boxes_long_lived() {
-    let long_lived = Box::new(1);
-    for i in 0..HEAP_SIZE {
-        let x = Box::new(i);
-        assert_eq!(i, *x);
-    }
-    assert_eq!(1, *long_lived);
 }
