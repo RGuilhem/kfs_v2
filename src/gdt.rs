@@ -1,4 +1,3 @@
-use crate::println;
 use core::ptr::addr_of;
 use lazy_static::lazy_static;
 use x86_64::structures::gdt::Descriptor;
@@ -44,7 +43,6 @@ lazy_static! {
 }
 
 pub fn init() {
-    println!("Start of gtd::init");
     use x86_64::instructions::segmentation::{Segment, CS};
     use x86_64::instructions::tables::load_tss;
 
@@ -53,5 +51,4 @@ pub fn init() {
         CS::set_reg(GDT.1.code_selector);
         load_tss(GDT.1.tss_selector);
     }
-    println!("End of gtd::init");
 }

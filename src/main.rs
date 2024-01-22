@@ -21,7 +21,6 @@ entry_point!(kernel_main);
 pub fn kernel_main(boot_info: &'static BootInfo) -> ! {
     use crate::memory::BootInfoFrameAllocator;
     use kfs_v2::allocator;
-    println!("Start of _start");
     kfs_v2::init();
 
     let phys_mem_offset = VirtAddr::new(boot_info.physical_memory_offset);
@@ -35,7 +34,6 @@ pub fn kernel_main(boot_info: &'static BootInfo) -> ! {
     #[cfg(test)]
     test_main();
 
-    println!("End of _start");
     executor.run();
 }
 
