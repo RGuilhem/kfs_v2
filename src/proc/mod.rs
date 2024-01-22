@@ -1,7 +1,10 @@
-use crate::println;
-use core::sync::atomic::AtomicU64;
-use core::sync::atomic::Ordering;
+use crate::proc::context::ProcessContext;
+use core::sync::atomic::{AtomicU64, Ordering};
+use x86_64::structures::idt::InterruptStackFrame;
+use x86_64::structures::paging::OffsetPageTable;
+use x86_64::PrivilegeLevel;
 
+pub mod context;
 /// INFO:
 /// https://en.wikipedia.org/wiki/Scheduling_(computing)
 /// Long term: Decides which Processes are to
@@ -47,22 +50,24 @@ pub enum ProcessStatus {
 pub struct Process {
     // Identification
     id: ProcessId,
-    // State
+    // State: Info saved when switching process
+    context: ProcessContext,
     // Control
     status: ProcessStatus,
+    father: ProcessId,
+    privilege: PrivilegeLevel,
+    //children: ProcessId[],
 }
 
-/// TODO: is this needed?
 impl Process {
-    pub fn new() -> Self {
-        Process {
-            id: ProcessId::new(),
+    pub fn init(page_table: OffsetPageTable<'static>, stack_frame: InterruptStackFrame) -> Self {
+        let id = ProcessId::new();
+        Self {
+            id,
+            context: ProcessContext::new(page_table, stack_frame),
+            father: id,
+            privilege: PrivilegeLevel::Ring0,
             status: ProcessStatus::Created,
         }
-    }
-
-    pub fn print_info(&self) {
-        println!("Proc id: {:?}", self.id);
-        println!("Proc status: {:?}", self.status);
     }
 }
