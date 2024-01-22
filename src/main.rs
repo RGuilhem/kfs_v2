@@ -10,6 +10,7 @@ use bootloader::entry_point;
 use bootloader::BootInfo;
 use core::panic::PanicInfo;
 use kfs_v2::memory;
+#[allow(unused_imports)] // needed for cfg(not(test))
 use kfs_v2::println;
 use kfs_v2::task::executor::Executor;
 use kfs_v2::task::keyboard;

@@ -5,7 +5,7 @@
 #![reexport_test_harness_main = "test_main"]
 
 use core::panic::PanicInfo;
-use kfs_v2::println;
+use kfs_v2::print;
 
 //Testing environnement before calling init
 #[no_mangle]
@@ -20,6 +20,6 @@ fn panic(info: &PanicInfo) -> ! {
 }
 
 #[test_case]
-fn test_println() {
-    println!("test_println output");
+fn test_print() {
+    print!("no crash without init\t");
 }
