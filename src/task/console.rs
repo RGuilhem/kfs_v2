@@ -4,8 +4,6 @@ use crate::println;
 use crate::QemuExitCode;
 use alloc::string::String;
 use alloc::vec::Vec;
-use core::arch::asm;
-use x86_64::software_interrupt;
 
 pub fn debug_command(line: &String) {
     if line.len() > 0 {
@@ -19,7 +17,7 @@ pub fn debug_command(line: &String) {
             "exit" => exit(),
             "translate" => translate(args),
             "t" => translate(args),
-            "int" => int(args),
+            "call" => call(args),
             "regs" => regs(args),
             &_ => unknown_command(),
         }
@@ -27,8 +25,14 @@ pub fn debug_command(line: &String) {
     print!("\n> ");
 }
 
-fn int(_args: &[&str]) {
-    unsafe { software_interrupt!(0x80) };
+fn call(args: &[&str]) {
+    use crate::syscall::do_syscall;
+
+    if args.len() > 0 {
+        let code: usize = args[0].parse().unwrap();
+        do_syscall(code);
+        println!("syscall done");
+    }
 }
 
 fn help() {

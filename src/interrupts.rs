@@ -1,3 +1,4 @@
+use crate::syscall::dispatch_syscall;
 use lazy_static::lazy_static;
 use pic8259::ChainedPics;
 use spin;
@@ -108,8 +109,16 @@ extern "x86-interrupt" fn page_fault_handler(
 
 /// See: https://en.wikipedia.org/wiki/System_call
 extern "x86-interrupt" fn software_interrupt_handler(stack_frame: InterruptStackFrame) {
+    use core::arch::asm;
+
     println!("INTERRUPT: Software:");
     println!("{:#?}", stack_frame);
+    // this needs to be called soon in order to not f up the register where the code is
+    // stored OR NOT when using the stack
+    println!("dispatch_syscall call");
+    dispatch_syscall();
+    println!("dispatch_syscall done");
+    unsafe { asm!("pop rax"); }
 }
 
 #[test_case]
