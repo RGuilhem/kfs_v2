@@ -1,7 +1,7 @@
 //TODO: remove when done
 #![allow(dead_code)]
 
-use crate::proc::context::ProcessContext;
+use crate::proc::context::Context;
 use alloc::vec::Vec;
 use core::sync::atomic::{AtomicU64, Ordering};
 use x86_64::structures::idt::InterruptStackFrame;
@@ -51,11 +51,11 @@ pub enum ProcessStatus {
 /// INFO:
 /// See this link
 /// https://en.wikipedia.org/wiki/Process_control_block
-pub struct Process {
+pub struct ProcessContolBlock {
     // Identification
     id: ProcessId,
     // State: Info saved when switching process
-    context: ProcessContext,
+    context: Context,
     // Control
     status: ProcessStatus,
     father: ProcessId,
@@ -63,12 +63,12 @@ pub struct Process {
     children: Vec<ProcessId>,
 }
 
-impl Process {
+impl ProcessContolBlock {
     pub fn init(page_table: PageTable, stack_frame: InterruptStackFrame) -> Self {
         let id = ProcessId::new();
         Self {
             id,
-            context: ProcessContext::new(page_table, stack_frame),
+            context: Context::new(page_table, stack_frame),
             father: id,
             children: Vec::new(),
             privilege: PrivilegeLevel::Ring0,

@@ -3,13 +3,13 @@ use core::arch::asm;
 use x86_64::structures::idt::InterruptStackFrame;
 
 #[derive(Debug)]
-pub struct ProcessContext {
+pub struct Context {
     page_table: PageTable,
     stack_frame: InterruptStackFrame,
     registers: Registers,
 }
 
-impl ProcessContext {
+impl Context {
     pub fn new(page_table: PageTable, stack_frame: InterruptStackFrame) -> Self {
         Self {
             page_table,
