@@ -3,8 +3,12 @@
 ## Requirements
 
 qemu-system-x86_64
+
 nightly version of rustc
+
 cargo install bootimage
+
+rustup component add llvm-tools-preview
 
 ## TODO
 
