@@ -109,12 +109,19 @@ extern "x86-interrupt" fn page_fault_handler(
 
 /// See: https://en.wikipedia.org/wiki/System_call
 extern "x86-interrupt" fn software_interrupt_handler(stack_frame: InterruptStackFrame) {
+    use core::mem;
+
     println!("INTERRUPT: Software:");
     println!("{:#?}", stack_frame);
-    // this needs to be called soon in order to not f up the register where the code is
-    // stored OR NOT when using the stack
-    println!("dispatch_syscall call");
-    dispatch_syscall();
+
+    let stack_pointer = (*stack_frame).stack_pointer;
+    // TODO: check where the 0x60 comes from
+    let code_addr = stack_pointer.as_u64() as usize + mem::size_of::<InterruptStackFrame>() + 0x60;
+    println!("syscall code addr: {:#x}", code_addr);
+    unsafe {
+        let code: usize = *(code_addr as *mut usize);
+        dispatch_syscall(code);
+    };
     println!("dispatch_syscall done");
 }
 

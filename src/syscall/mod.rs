@@ -2,13 +2,8 @@ use crate::println;
 use core::arch::asm;
 
 #[inline(always)]
-pub fn dispatch_syscall() {
-    unsafe {
-        let mut code: usize;
-        asm!("pop {}", out(reg) code);
-        asm!("push {}", in(reg) code);
-        println!("code: {:#x}", code);
-    };
+pub fn dispatch_syscall(code: usize) {
+    println!("code: {:#x}", code);
     println!("end of dispatch_syscall")
 }
 
@@ -16,7 +11,7 @@ pub fn dispatch_syscall() {
 pub fn do_syscall(code: usize) {
     unsafe {
         asm!("push {}", in(reg) code);
-        asm!("int {}", const 0x80, options(nomem, nostack));
+        asm!("int {}", const 0x80, options(nomem));
         asm!("pop rax")
         //asm!("int {id}", id = const 0x80, options(nomem, nostack));
     };

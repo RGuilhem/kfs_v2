@@ -29,7 +29,9 @@ fn call(args: &[&str]) {
     use crate::syscall::do_syscall;
 
     if args.len() > 0 {
-        let code: usize = args[0].parse().unwrap();
+        let code: usize = usize::from_str_radix(args[0], 16).unwrap();
+        println!("code sent: {:#x}", code);
+        println!("addr: {:p}", &code);
         do_syscall(code);
         println!("syscall done");
     }
