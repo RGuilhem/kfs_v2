@@ -15,7 +15,7 @@ pub fn debug_command(line: &String) {
         match command {
             "help" => help(),
             "exit" => exit(),
-            "translate" => translate(args),
+            //"translate" => translate(args),
             "t" => translate(args),
             "call" => call(args),
             "regs" => regs(args),
@@ -39,6 +39,8 @@ fn help() {
     println!("Debug commands:");
     println!("help: print this help message");
     println!("exit: exit qemu");
+    println!("call <arg>: try to syscall code provided");
+    println!("regs: show various cpu infos");
 }
 
 fn exit() {
